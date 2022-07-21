@@ -89,3 +89,4 @@ DerivedDataCache/*
 
 !/MyGame/Content/Blueprints/
 !/MyGame/Content/Levels/
+MyGame/Content/Levels/InGameMap.umap
