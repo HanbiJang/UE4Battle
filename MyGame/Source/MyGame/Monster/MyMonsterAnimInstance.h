@@ -49,4 +49,12 @@ public:
 
 	UFUNCTION()
 		void AnimNotify_DeadEnd(); //죽음 끝
+
+	//공격
+	UFUNCTION()
+		void AnimNotify_OnAttakTrigger();
+
+	//일반 상태로 
+	UFUNCTION()
+		void AnimNotify_Idle();
 };

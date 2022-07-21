@@ -93,9 +93,12 @@ public:
 	UFUNCTION() // 충돌 알림 함수
 	virtual void OnBeginOverlap(UPrimitiveComponent* _PrimitiveComponent, AActor* _OtherActor, UPrimitiveComponent* _OtherComp, int32 _OtherBodyIndex, bool _bFromSweep, const FHitResult& _SweepResult);
 
-	// 공격 발생 함수
+
 public:
-	virtual void OnAttTrigger();
+	virtual void OnAttakTrigger();
+
+	float fDamage = 10.f;
+	float GetDamage() { return fDamage;  }
 
 	//맞는 반응
 public:

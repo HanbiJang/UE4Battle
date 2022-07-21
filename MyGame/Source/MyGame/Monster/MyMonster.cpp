@@ -69,7 +69,7 @@ void AMyMonster::OnBeginOverlap(UPrimitiveComponent* _PrimitiveComponent, AActor
 
 }
 
-void AMyMonster::OnAttTrigger()
+void AMyMonster::OnAttakTrigger()
 {
 	// 플레이어를 알아 낸다.
 	AMyCharacter* Player = Cast<AMyCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -109,10 +109,15 @@ void AMyMonster::OnAttTrigger()
 			float fRadian = FMath::Acos(fDot);
 			float fAngle = FMath::Abs(FMath::RadiansToDegrees(fRadian));
 
-			if (fAngle <= fDegree / 2.f)
+			if (fAngle <= fDegree /*/ 2.f*/)
 			{
-				FTransform trans(arrHit[i].ImpactNormal.Rotation(), arrHit[i].ImpactPoint);
+				//FTransform trans(arrHit[i].ImpactNormal.Rotation(), arrHit[i].ImpactPoint);
 				//UEffectMgr::GetInst(GetWorld())->CreateEffect(EEFFECT_TYPE::ICE, trans, GetLevel());
+
+				//데미지 주기
+				FDamageEvent d;
+				Player->TakeDamage(fDamage, d ,NULL,this);
+
 			}
 		}
 	}

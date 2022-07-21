@@ -31,6 +31,17 @@ void UMyMonsterAnimInstance::NativeUpdateAnimation(float _fDT)
 	}
 }
 
+void UMyMonsterAnimInstance::AnimNotify_OnAttakTrigger()
+{
+	AMyMonster* pMonster = Cast<AMyMonster>(TryGetPawnOwner());
+
+	if (nullptr != pMonster)
+	{
+		pMonster->OnAttakTrigger();
+	}
+
+}
+
 void UMyMonsterAnimInstance::AnimNotify_NormalMon_AttEnd()
 {
 	AMyMonster* pMonster = Cast<AMyMonster>(TryGetPawnOwner());
@@ -56,4 +67,12 @@ void UMyMonsterAnimInstance::AnimNotify_DeadEnd() {
 	//ав╠Б
 	AMyMonster* pMonster = Cast<AMyMonster>(TryGetPawnOwner());
 	pMonster->Destroy();
+}
+
+void UMyMonsterAnimInstance::AnimNotify_Idle()
+{
+	AMyMonster* pMonster = Cast<AMyMonster>(TryGetPawnOwner());
+
+	if (pMonster)
+		pMonster->ChangeState(EMON_STATE::IDLE);
 }
