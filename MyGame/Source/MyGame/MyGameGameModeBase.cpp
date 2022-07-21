@@ -40,8 +40,11 @@ void AMyGameGameModeBase::UpdatePlayerHUD(float _CurHPRatio,float _CurMPRatio){
 
 	UPlayerHUD* pPlayerHUD = m_MainHUD->GetPlayerHUD();
 
-	//pPlayerHUD->SetHP(_CurHPRatio);
-	pPlayerHUD->SetMP(_CurMPRatio);
+	if (pPlayerHUD) {
+		//pPlayerHUD->SetHP(_CurHPRatio);
+		pPlayerHUD->SetMP(_CurMPRatio);
+	}
+
 }
 
 void AMyGameGameModeBase::BeginPlay()
@@ -51,7 +54,7 @@ void AMyGameGameModeBase::BeginPlay()
 	//현재 레벨이 GameScene 이면 아래를 수행
 	FString levelName = GetWorld()->GetMapName();
 
-	if (levelName == "UEDPIE_0_GameLevel") {
+	if (levelName == "UEDPIE_0_InGameMap") {
 		m_MainHUD = Cast<UMainHUD> (CreateWidget(GetWorld(), m_MainHUDClass));
 		m_MainHUD->AddToViewport();
 	}
