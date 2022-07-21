@@ -88,6 +88,9 @@ public: //이동 관련
 	void RotationY(float fscale);
 	void RotationZ(float fscale);
 
+	//데미지 입기
+	virtual float TakeDamage(float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 
 public://상태 관련
 	EPLAYER_STATE GetState(); //상태 값 가져오기

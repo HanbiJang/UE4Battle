@@ -121,3 +121,11 @@ void UMyAnimInstance::AnimNotify_AttackSound()
 
 
 #pragma endregion
+
+void UMyAnimInstance::AnimNotify_Idle()
+{
+	AMyCharacter* pCharacter = Cast<AMyCharacter>(TryGetPawnOwner());
+
+	if (pCharacter)
+		pCharacter->ChangeState(EPLAYER_STATE::IDLE);
+}

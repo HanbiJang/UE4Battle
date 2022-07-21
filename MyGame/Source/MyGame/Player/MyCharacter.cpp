@@ -75,7 +75,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 	//점프 횟수 조절하기
 	if (m_AnimInst->Getm_JumpEnd()) { //jumpend 변수가 true일때만 1초 뒤에 전환함
-		if (0.3f <= jumpTime)
+		if (0.5f <= jumpTime)
 		{
 			m_AnimInst->Setm_JumpEnd(false);
 			jumpTime = 0.f; //초기화
@@ -184,10 +184,10 @@ void AMyCharacter::ChangeState(EPLAYER_STATE newState) {
 	}
 
 
-	if (newState == EPLAYER_STATE::JUMP) {
-		Jump();
-		//UE_LOG(LogTemp, Log, TEXT("jump!"));
-	}
+	//if (newState == EPLAYER_STATE::JUMP) {
+	//	Jump();
+	//	//UE_LOG(LogTemp, Log, TEXT("jump!"));
+	//}
 }
 
 //애니메이션이 중간에 끊겼을 때 (스테이트)수치값을 원래대로 하기 위함
@@ -229,7 +229,7 @@ void AMyCharacter::MoveFront(float fscale) {
 	if (GetState() != EPLAYER_STATE::ATTACK 
 		&& GetState() != EPLAYER_STATE::JUMP 
 		&& GetState() != EPLAYER_STATE::RANGEATTACK
-		&& GetState() != EPLAYER_STATE::CHARGE
+		//&& GetState() != EPLAYER_STATE::CHARGE
 		&& GetState() != EPLAYER_STATE::DOWNATTACK) {
 		AddMovementInput(GetActorForwardVector(), fscale);
 
@@ -289,7 +289,7 @@ void AMyCharacter::MoveFront(float fscale) {
 void AMyCharacter::MoveSide(float fscale) {
 	if (GetState() != EPLAYER_STATE::ATTACK 
 		&& GetState() != EPLAYER_STATE::JUMP
-		&& GetState() != EPLAYER_STATE::CHARGE
+		//&& GetState() != EPLAYER_STATE::CHARGE
 		&& GetState() != EPLAYER_STATE::RANGEATTACK && GetState() != EPLAYER_STATE::DOWNATTACK) {
 		AddMovementInput(GetActorRightVector(), fscale);
 
@@ -332,13 +332,21 @@ void AMyCharacter::MoveSide(float fscale) {
 }
 
 void AMyCharacter::JumpAction() {
-	if (!m_AnimInst->Getm_JumpEnd()) {
-		if (JumpCurrentCount >= 1 && m_AnimInst->Getm_JumpComboEnable()) { //2단점프
-			m_AnimInst->Setm_Jump2(true);
-		}
-
+	
+	if (!m_AnimInst->Getm_JumpEnd() && GetMovementComponent()->IsMovingOnGround()) 
+	{
+		Jump();
 		AMyCharacter::ChangeState(EPLAYER_STATE::JUMP); //점프로 상태 변화
 	}
+		
+
+	//if (!m_AnimInst->Getm_JumpEnd()) {
+	//	//if (JumpCurrentCount >= 1 && m_AnimInst->Getm_JumpComboEnable()) { //2단점프
+	//	//	m_AnimInst->Setm_Jump2(true);
+	//	//}
+
+	//	AMyCharacter::ChangeState(EPLAYER_STATE::JUMP); //점프로 상태 변화
+	//}
 }
 #pragma endregion
 
@@ -361,6 +369,17 @@ void AMyCharacter::OnEndOverlap(UPrimitiveComponent* _PrimitiveComponent, AActor
 
 void AMyCharacter::OnHit(UPrimitiveComponent* _HitComponent, AActor* _OtherActor, UPrimitiveComponent* _OtherComp, FVector _NormalImpulse, const FHitResult& Hit)
 {
+}
+
+
+float AMyCharacter::TakeDamage(float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) {
+
+	float damageApplied = GetInfo().fCurHP - DamageTaken;
+	//체력 설정
+	GetInfo().fCurHP = damageApplied;
+
+	return damageApplied;
+
 }
 
 

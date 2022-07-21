@@ -44,9 +44,13 @@ public:
 	virtual void RangeAttack() override;
 	virtual void DownAttack() override;
 
-	//회복
+	//데미지 입기
+	float TakeDamage(float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	//가드
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void Charging();
+	void Idle();
 
 
 	// 어택 콜백
@@ -61,6 +65,7 @@ public:
 	//사운드
 	USoundBase*			hitSound;
 	USoundBase*			rangeAttackSound;
+	USoundBase*			SQ_Hit;
 	virtual	void AttackSoundPlay() override;
 
 };

@@ -125,5 +125,6 @@ public:
 	bool Getm_Attack02ComboEnable() { return m_Attack02ComboEnable; }
 
 #pragma endregion
-
+	UFUNCTION()
+		void AnimNotify_Idle();
 };

@@ -53,6 +53,13 @@ AKnight::AKnight() {
 	{
 		rangeAttackSound = soundasset2.Object;
 	}
+
+	//맞았을 때 사운드
+	ConstructorHelpers::FObjectFinder<USoundBase> soundasset3(TEXT("SoundWave'/Game/MyBGM/Woman_Hit_2.Woman_Hit_2'"));
+	if (soundasset3.Succeeded())
+	{
+		SQ_Hit = soundasset3.Object;
+	}
 };
 
 
@@ -61,8 +68,9 @@ void AKnight::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//회복
+	//가드
 	PlayerInputComponent->BindAction("Charge", EInputEvent::IE_Pressed, this, &AKnight::Charging);
+	PlayerInputComponent->BindAction("Charge", EInputEvent::IE_Released, this, &AKnight::Idle);
 }
 
 void AKnight::Tick(float DeltaTime) {
@@ -96,7 +104,7 @@ void AKnight::Attack() {
 		if (myState == EPLAYER_STATE::MOVE || myState == EPLAYER_STATE::JUMP) { //움직임 가능 공격
 			AMyCharacter::ChangeState(EPLAYER_STATE::ATTACK_MOVABLE);
 			// 소리 재생, 2D
-			UGameplayStatics::PlaySoundAtLocation(GetWorld(), hitSound, GetActorLocation(), 1.f, 1.f, 0.f);
+			//UGameplayStatics::PlaySoundAtLocation(GetWorld(), hitSound, GetActorLocation(), 1.f, 1.f, 0.f);
 		}
 
 		//일반공격
@@ -131,6 +139,32 @@ void AKnight::AttackSoundPlay() {
 	
 }
 
+float AKnight::TakeDamage(float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) {
+	
+	AMyCharacter::TakeDamage(DamageTaken, DamageEvent, EventInstigator, DamageCauser);
+	float damageApplied = GetInfo().fCurHP;
+
+	//상태 변화
+	if (GetState() != EPLAYER_STATE::CHARGE) //가드 중이 아닐 때
+	{
+		ChangeState(EPLAYER_STATE::HIT); //가드 상태가 아니면 피격으로 상태 변화
+
+		//비명 소리 재생
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SQ_Hit, GetActorLocation());
+
+		//체력 감소		
+		GEngine->AddOnScreenDebugMessage(0, 1, FColor::Black, FString::Printf(TEXT(" HP :      %f"), damageApplied));
+	}
+
+	else  //가드 중일 때
+	{
+	
+	}	
+
+	return damageApplied;
+
+}
+
 
 void AKnight::RangeAttack() { 
 
@@ -155,12 +189,17 @@ void AKnight::DownAttack() { //다운 어택
 	GetAnimInst()->Montage_Play(m_arrMontage[0]);
 }
 
-void AKnight::Charging() { //체력 회복
+void AKnight::Charging() { //가드 기능
 
 	ChangeState(EPLAYER_STATE::CHARGE);
 
-	//체력회복 코드
-	//...
+
+}
+
+void AKnight::Idle()
+{
+	ChangeState(EPLAYER_STATE::IDLE);
+
 }
 
 
@@ -179,6 +218,7 @@ void AKnight::AttackTrigger()
 		FVector vFoward = GetActorForwardVector();
 		FTransform trans(GetActorRotation(), vPos + vFoward * 50.f);
 		UMyEffectManager::GetInst(GetWorld())->CreateEffect(EEFFECT::ATTACK1, trans, GetLevel());
+		GEngine->AddOnScreenDebugMessage(0,1,FColor::Black, FString::Printf(TEXT("effect On!!")));
 
 		//공격 (충돌) 범위 체크
 		//Trace 채널을 이용한 범위 체크		
@@ -235,9 +275,9 @@ void AKnight::AttackTrigger()
 	
 
 #ifdef ENABLE_DRAW_DEBUG //범위를 눈으로 확인
-	FColor color;
-	arrHit.Num() ? color = FColor::Red : color = FColor::Green;
-	DrawDebugSphere(GetWorld(), vPos + FVector(0, 0, 50.f), fRadius, 12, color, false, 2.5f);
+	//FColor color;
+	//arrHit.Num() ? color = FColor::Red : color = FColor::Green;
+	//DrawDebugSphere(GetWorld(), vPos + FVector(0, 0, 50.f), fRadius, 12, color, false, 2.5f);
 #endif
 	}
 }
