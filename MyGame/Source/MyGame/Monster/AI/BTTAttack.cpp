@@ -37,6 +37,7 @@ EBTNodeResult::Type UBTTAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, u
 	return EBTNodeResult::Type::Succeeded;
 }
 
+
 void UBTTAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	/*if ()

@@ -4,6 +4,7 @@
 
 #include "MyAIController.h"
 #include "../../Global/MyCharacterStates.h"
+#include "MyGame/Player/MyCharacter.h"
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
@@ -29,4 +30,6 @@ protected:
 
 	// ÀÛ¾÷ Å»Ãâ
 	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+
 };

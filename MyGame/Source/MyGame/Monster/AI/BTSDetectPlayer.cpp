@@ -63,8 +63,8 @@ void UBTSDetectPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMe
 
 	//탐지 범위 보기
 #ifdef ENABLE_DRAW_DEBUG
-	FColor color;
-	bDetect ? color = FColor::Red : color = FColor::Green;
-	DrawDebugSphere(GetWorld(), vMonPos, fDetectionRange, 40, color, false, 0.6f);
+	//FColor color;
+	//bDetect ? color = FColor::Red : color = FColor::Green;
+	//DrawDebugSphere(GetWorld(), vMonPos, fDetectionRange, 40, color, false, 0.6f);
 #endif
 }
